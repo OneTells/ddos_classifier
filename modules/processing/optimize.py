@@ -11,6 +11,7 @@ def main():
     dataframe['mbtf'] = dataframe['mbtf'].apply(int)
     dataframe['mprf'] = dataframe['mprf'].apply(int)
     dataframe['mbrf'] = dataframe['mbrf'].apply(int)
+    dataframe['label'] = dataframe['label'].apply(int)
 
     dataframe.to_csv('C:/Users/egork/Desktop/DDoS/data/optimize_dataset.csv', index=False)
 

@@ -11,7 +11,7 @@ class Action:
         self.__key: str = key
 
     def check(self, row: Series) -> bool:
-        return row[self.__key] > self.threshold
+        return row[self.__key] >= self.threshold
 
     def increase(self) -> None:
         self.threshold += self.__step
