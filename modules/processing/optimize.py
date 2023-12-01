@@ -1,10 +1,12 @@
+import os
+
 import pandas as pd
 from pandas import DataFrame
 
 
 def main():
     dataframe: DataFrame = pd.read_csv(
-        'C:/Users/egork/Desktop/DDoS/data/new_dataset.csv'
+        r'C:/Users/egork/Desktop/Сlassifier/data/new_dataset.csv'
     )
 
     dataframe['mptf'] = dataframe['mptf'].apply(int)
@@ -13,7 +15,7 @@ def main():
     dataframe['mbrf'] = dataframe['mbrf'].apply(int)
     dataframe['label'] = dataframe['label'].apply(int)
 
-    dataframe.to_csv('C:/Users/egork/Desktop/DDoS/data/optimize_dataset.csv', index=False)
+    dataframe.to_csv(r'C:/Users/egork/Desktop/Сlassifier/data/optimize_dataset.csv', index=False)
 
 
 if __name__ == '__main__':
