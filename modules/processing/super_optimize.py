@@ -3,7 +3,7 @@ from pandas import DataFrame
 
 
 def main():
-    name = 'two_dataset'
+    name = 'one_dataset'
 
     dataframe: DataFrame = pd.read_csv(
         f'C:/Users/egork/Desktop/Сlassifier/data/{name}.csv'
