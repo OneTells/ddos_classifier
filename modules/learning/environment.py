@@ -19,7 +19,7 @@ class ClassifierEnv(Env[np.ndarray, int]):
 
         self.__dataframe: TextFileReader = self.__get_dataset()
 
-        self.action_space = Discrete(11)
+        self.action_space: Discrete = Discrete(11)
 
         low = np.array([0, 0, 0, 0, 0], dtype=np.float32)
 

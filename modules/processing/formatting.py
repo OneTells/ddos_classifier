@@ -28,7 +28,7 @@ def main():
         writer = DictWriter(file, fieldnames=['mptf', 'mbtf', 'mprf', 'mbrf', 'rtp', 'label'])
         writer.writeheader()
 
-        dataframes: Iterable[DataFrame] = pd.read_csv(
+        dataframes = pd.read_csv(
             'C:/Users/egork/Desktop/DDoS/data/original_dataset.csv', chunksize=100_000
         )
         for index, dataframe in enumerate(dataframes):
