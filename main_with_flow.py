@@ -9,7 +9,7 @@ from tensorflow.keras.layers import Dense, Flatten
 from modules.learning.environment import ClassifierEnv
 
 
-class CartPoleEnv:
+class RunnerEnv:
 
     @staticmethod
     def create_model(states: int, actions: int) -> Sequential:
@@ -48,7 +48,7 @@ class CartPoleEnv:
 
 
 def main():
-    CartPoleEnv.run()
+    RunnerEnv.run()
 
 
 if __name__ == "__main__":
