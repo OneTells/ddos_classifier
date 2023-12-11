@@ -44,6 +44,8 @@ class RunnerEnv:
         results = agent.test(env, nb_episodes=10, visualize=True)
         print(np.mean(results.history["episode_reward"]))
 
+        agent.save_weights(f'model')
+
         env.close()
 
 

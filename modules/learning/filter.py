@@ -1,7 +1,7 @@
 from pandas import Series
 
 
-class Action:
+class Filter:
 
     def __init__(self, threshold: float, step: float, key: str) -> None:
         self.threshold: float = threshold

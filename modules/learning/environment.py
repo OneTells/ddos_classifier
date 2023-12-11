@@ -8,7 +8,7 @@ from gymnasium.spaces import Discrete, Box
 from pandas import Series, DataFrame
 from pandas.io.parsers import TextFileReader
 
-from modules.learning.action import Action
+from modules.learning.filter import Filter
 
 
 class ClassifierEnv(Env[np.ndarray, int]):
@@ -36,12 +36,12 @@ class ClassifierEnv(Env[np.ndarray, int]):
 
         self.observation_space = Box(low, high, dtype=np.float32)
 
-        self.__actions: tuple[Action, ...] = (
-            Action(3, 1, 'mptf'),
-            Action(40, 5, 'mbtf'),
-            Action(3, 1, 'mprf'),
-            Action(50, 5, 'mbrf'),
-            Action(0.1, 0.01, 'rtp')
+        self.__filters: tuple[Filter, ...] = (
+            Filter(3, 1, 'mptf'),
+            Filter(40, 5, 'mbtf'),
+            Filter(3, 1, 'mprf'),
+            Filter(50, 5, 'mbrf'),
+            Filter(0.1, 0.01, 'rtp')
         )
 
     def __get_dataset(self) -> TextFileReader:
@@ -50,7 +50,7 @@ class ClassifierEnv(Env[np.ndarray, int]):
         )
 
     def __check_row(self, row: Series) -> bool:
-        for action in self.__actions:
+        for action in self.__filters:
             if action.check(row):
                 return True
 
@@ -67,7 +67,7 @@ class ClassifierEnv(Env[np.ndarray, int]):
 
     def reset(self, *_) -> tuple[np.ndarray, dict[str, Any]]:
         self.__dataframe: TextFileReader = self.__get_dataset()
-        return np.array([action.reset() for action in self.__actions], dtype=np.float32), {}
+        return np.array([action.reset() for action in self.__filters], dtype=np.float32), {}
 
     def step(self, action: int) -> tuple[np.ndarray, float, bool, bool, dict[str, Any]]:
         assert self.action_space.contains(action), f"{action!r} ({type(action)}) invalid"
@@ -75,13 +75,13 @@ class ClassifierEnv(Env[np.ndarray, int]):
         try:
             dataframe = next(self.__dataframe)
         except StopIteration:
-            return np.array([action.threshold for action in self.__actions], dtype=np.float32), 0, True, False, {}
+            return np.array([action.threshold for action in self.__filters], dtype=np.float32), 0, True, False, {}
 
         if action != 10:
             if action % 2 == 0:
-                self.__actions[action // 2].increase()
+                self.__filters[action // 2].increase()
             else:
-                self.__actions[action // 2].decrease()
+                self.__filters[action // 2].decrease()
 
         reward = self.__reward(dataframe)
-        return np.array([action.threshold for action in self.__actions], dtype=np.float32), reward, False, False, {}
+        return np.array([action.threshold for action in self.__filters], dtype=np.float32), reward, False, False, {}
