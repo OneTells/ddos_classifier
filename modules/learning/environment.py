@@ -3,15 +3,16 @@ from typing import Any
 
 import numpy as np
 import pandas as pd
-from gymnasium import Env
 from gymnasium.spaces import Discrete, Box
+from numpy import ndarray, dtype, floating
+from numpy._typing import _32Bit
 from pandas import Series, DataFrame
 from pandas.io.parsers import TextFileReader
 
 from modules.learning.filter import Filter
 
 
-class ClassifierEnv(Env[np.ndarray, int]):
+class ClassifierEnv:
 
     def __init__(self, dataset_path: str = None, dataset_count_row: int = 1000):
         self.__dataset_path = dataset_path
@@ -46,7 +47,7 @@ class ClassifierEnv(Env[np.ndarray, int]):
 
     def __get_dataset(self) -> TextFileReader:
         return pd.read_csv(
-            self.__dataset_path or f'{os.getcwd()}/data/super_optimize_one_dataset.bz2', chunksize=self.__dataset_count_row
+            self.__dataset_path or f'{os.getcwd()}/data/super_optimize_two_dataset.bz2', chunksize=self.__dataset_count_row
         )
 
     def __check_row(self, row: Series) -> bool:
@@ -65,17 +66,17 @@ class ClassifierEnv(Env[np.ndarray, int]):
 
         return float(round(successful_classifications_number / len(dataframe) * 100))
 
-    def reset(self, *_) -> tuple[np.ndarray, dict[str, Any]]:
+    def reset(self, *_) -> ndarray[Any, dtype[Any]]:
         self.__dataframe: TextFileReader = self.__get_dataset()
-        return np.array([action.reset() for action in self.__filters], dtype=np.float32), {}
+        return np.array([filter_.reset() for filter_ in self.__filters], dtype=np.float32)
 
-    def step(self, action: int) -> tuple[np.ndarray, float, bool, bool, dict[str, Any]]:
+    def step(self, action: int) -> tuple[np.ndarray, float, bool]:
         assert self.action_space.contains(action), f"{action!r} ({type(action)}) invalid"
 
         try:
             dataframe = next(self.__dataframe)
         except StopIteration:
-            return np.array([action.threshold for action in self.__filters], dtype=np.float32), 0, True, False, {}
+            return np.array([action.threshold for action in self.__filters], dtype=np.float32), 0, True
 
         if action != 10:
             if action % 2 == 0:
@@ -84,4 +85,4 @@ class ClassifierEnv(Env[np.ndarray, int]):
                 self.__filters[action // 2].decrease()
 
         reward = self.__reward(dataframe)
-        return np.array([action.threshold for action in self.__filters], dtype=np.float32), reward, False, False, {}
+        return np.array([filter_.threshold for filter_ in self.__filters], dtype=np.float32), reward, False
