@@ -1,10 +1,13 @@
 import numpy as np
 from keras import Sequential
-from keras.optimizer_v2.adam import Adam
+from keras.src.layers import Dense, Flatten
+
+from tensorflow.python.keras.optimizer_v2.adam import Adam
+
+
 from rl.agents import DQNAgent
 from rl.memory import SequentialMemory
 from rl.policy import BoltzmannQPolicy
-from tensorflow.keras.layers import Dense, Flatten
 
 from modules.learning.environment import ClassifierEnv
 
@@ -45,8 +48,6 @@ class RunnerEnv:
         print(np.mean(results.history["episode_reward"]))
 
         agent.save_weights(f'model')
-
-        env.close()
 
 
 def main():

@@ -4,8 +4,7 @@ from typing import Any
 import numpy as np
 import pandas as pd
 from gymnasium.spaces import Discrete, Box
-from numpy import ndarray, dtype, floating
-from numpy._typing import _32Bit
+from numpy import ndarray, dtype
 from pandas import Series, DataFrame
 from pandas.io.parsers import TextFileReader
 
