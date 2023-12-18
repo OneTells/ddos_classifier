@@ -47,6 +47,10 @@ class Replay(object):
         return inputs, targets
 
 
+loss_ = []
+reward_ = []
+
+
 def train(env, replayMemory, model, epochs, epsilon=.9, batch_size=10, set_size=10, timesteps=200, output=1):
     set_hist = []
     win_hist = []
@@ -58,9 +62,9 @@ def train(env, replayMemory, model, epochs, epsilon=.9, batch_size=10, set_size=
     for i_episode in range(epochs):
 
         observation = env.reset()
-        loss = 0.
+        loss = 0
+        reward__ = 0
         for t in range(timesteps):
-            print('fillf')
             state_0 = np.array(observation, ndmin=2)
 
             if np.random.rand() < epsilon:
@@ -69,7 +73,7 @@ def train(env, replayMemory, model, epochs, epsilon=.9, batch_size=10, set_size=
                 action = np.argmax(model.predict(state_0)[0])
 
             observation, reward, done = env.step(action)
-
+            reward__ += reward
             state_1 = np.array(observation, ndmin=2)
 
             replayMemory.remember([state_0, action, reward, state_1], done)
@@ -104,6 +108,9 @@ def train(env, replayMemory, model, epochs, epsilon=.9, batch_size=10, set_size=
             set_hist.append(win_hist)
             win_hist = []
 
+        loss_.append(loss)
+        reward_.append(reward__)
+
     env.reset()
 
 
@@ -130,9 +137,11 @@ def main():
     model.add(Dense(num_actions))
     model.compile(Adam(learning_rate), "mse")
 
-    train(env=env, replayMemory=memory, model=model, epochs=epochs,
-          epsilon=epsilon, batch_size=batch_size, set_size=set_size,
-          timesteps=timesteps, output=1)
+    train(
+        env=env, replayMemory=memory, model=model, epochs=epochs,
+        epsilon=epsilon, batch_size=batch_size, set_size=set_size,
+        timesteps=timesteps, output=1
+    )
 
     model.save_weights(f'model.weights.h5')
 
