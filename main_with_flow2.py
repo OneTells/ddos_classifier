@@ -1,3 +1,5 @@
+import os
+
 from keras.models import Sequential
 from keras.src.layers import Dense
 from keras.src.optimizers import Adam
@@ -27,7 +29,7 @@ def main():
     time_steps = 10  # length of each game (for Cartpole, ideally set this to between 100-200)
     epochs = 1  # (Amount of games played)
 
-    env = ClassifierEnv()
+    env = ClassifierEnv(f'{os.getcwd()}/data/super_optimize_two_dataset.bz2')
 
     feature_dims = len(env.reset())
     num_actions = env.action_space.n

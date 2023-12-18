@@ -13,7 +13,7 @@ from modules.learning.filter import Filter
 
 class ClassifierEnv:
 
-    def __init__(self, dataset_path: str = None, dataset_count_row: int = 1000):
+    def __init__(self, dataset_path: str, dataset_count_row: int = 1000):
         self.__dataset_path = dataset_path
         self.__dataset_count_row = dataset_count_row
 
@@ -46,7 +46,7 @@ class ClassifierEnv:
 
     def __get_dataset(self) -> TextFileReader:
         return pd.read_csv(
-            self.__dataset_path or f'{os.getcwd()}/data/super_optimize_two_dataset.bz2', chunksize=self.__dataset_count_row
+            self.__dataset_path, chunksize=self.__dataset_count_row
         )
 
     def __check_row(self, row: Series) -> bool:
