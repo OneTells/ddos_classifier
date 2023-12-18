@@ -13,6 +13,7 @@ def create_model(hidden_size: float, feature_dims: int, num_actions: int, learni
     model.add(Dense(hidden_size, activation='relu'))
     model.add(Dense(num_actions))
     model.compile(Adam(learning_rate), "mse")
+
     return model
 
 

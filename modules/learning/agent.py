@@ -18,13 +18,13 @@ class Agent:
         self.__time_steps = time_steps
 
     def train(self) -> None:
-        for i_episode in range(self.__epochs):
+        for _ in range(self.__epochs):
             observation = self.__env.reset()
 
             loss_on_epochs = 0
             reward_on_epochs = 0
 
-            for t in range(self.__time_steps):
+            for _ in range(self.__time_steps):
                 state_before = np.array(observation, ndmin=2)
 
                 if np.random.rand() < self.__epsilon:
@@ -44,6 +44,9 @@ class Agent:
                 loss = self.__model.train_on_batch(inputs, targets)
                 loss_on_epochs += loss
 
+                if not done:
+                    break
+
             self.loss_list.append(loss_on_epochs)
             self.reward_list.append(reward_on_epochs)
 
@@ -52,12 +55,20 @@ class Agent:
     def test(self, games: int = 2, time_steps: int = 10):
         for _ in range(games):
             observation = self.__env.reset()
+
             total_reward = 0
+            steps = 0
 
             for _ in range(time_steps):
+                steps += 1
+
                 state = np.array(observation, ndmin=2)
                 action = np.argmax(self.__model.predict(state)[0])
+
                 observation, reward, done = self.__env.step(action)
                 total_reward += reward
 
-            print(total_reward / time_steps)
+                if not done:
+                    break
+
+            print(total_reward / steps)
