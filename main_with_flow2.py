@@ -7,7 +7,7 @@ from modules.learning.environment import ClassifierEnv
 from modules.learning.memory import Memory
 
 
-def create_model(hidden_size: float, feature_dims: int, num_actions: int, learning_rate: float):
+def create_model(hidden_size: float, feature_dims: int, num_actions: int, learning_rate: float) -> Sequential:
     model = Sequential()
     model.add(Dense(hidden_size, input_shape=(feature_dims,), activation='relu'))
     model.add(Dense(hidden_size, activation='relu'))
@@ -32,7 +32,7 @@ def main():
     feature_dims = len(env.reset())
     num_actions = env.action_space.n
 
-    memory = Memory(max_memory=max_memory, discount=discount, env_dim=feature_dims)
+    memory = Memory(feature_dims, max_memory, discount)
 
     model = create_model(hidden_size, feature_dims, num_actions, learning_rate)
 

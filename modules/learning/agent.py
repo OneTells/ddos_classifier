@@ -1,11 +1,12 @@
 import numpy as np
+from keras import Sequential
 
 from modules.learning.memory import Memory
 
 
 class Agent:
 
-    def __init__(self, env, memory: Memory, model, epochs, epsilon=0.9, batch_size=10, time_steps=200):
+    def __init__(self, env, memory: Memory, model: Sequential, epochs: int, epsilon: float, batch_size: int, time_steps: int):
         self.loss_list = []
         self.reward_list = []
 
@@ -32,19 +33,19 @@ class Agent:
                 else:
                     action = np.argmax(self.__model.predict(state_before)[0])
 
-                observation, reward, done = self.__env.step(action)
+                observation, reward, is_done = self.__env.step(action)
                 total_reward += reward
 
                 state_after = np.array(observation, ndmin=2)
 
-                self.__memory.remember([state_before, action, reward, state_after], done)
+                self.__memory.remember([state_before, action, reward, state_after], is_done)
 
                 inputs, targets = self.__memory.get_batch(self.__model, max_batch_size=self.__batch_size)
 
                 loss = self.__model.train_on_batch(inputs, targets)
                 total_loss += loss
 
-                if not done:
+                if not is_done:
                     break
 
             self.loss_list.append(total_loss)
@@ -52,7 +53,7 @@ class Agent:
 
         self.__env.reset()
 
-    def test(self, games: int = 2, time_steps: int = 10):
+    def test(self, games: int = 2, time_steps: int = 10) -> None:
         for _ in range(games):
             observation = self.__env.reset()
 
