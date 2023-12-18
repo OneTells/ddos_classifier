@@ -21,8 +21,8 @@ class Agent:
         for _ in range(self.__epochs):
             observation = self.__env.reset()
 
-            loss_on_epochs = 0
-            reward_on_epochs = 0
+            total_loss = 0
+            total_reward = 0
 
             for _ in range(self.__time_steps):
                 state_before = np.array(observation, ndmin=2)
@@ -33,7 +33,7 @@ class Agent:
                     action = np.argmax(self.__model.predict(state_before)[0])
 
                 observation, reward, done = self.__env.step(action)
-                reward_on_epochs += reward
+                total_reward += reward
 
                 state_after = np.array(observation, ndmin=2)
 
@@ -42,13 +42,13 @@ class Agent:
                 inputs, targets = self.__memory.get_batch(self.__model, max_batch_size=self.__batch_size)
 
                 loss = self.__model.train_on_batch(inputs, targets)
-                loss_on_epochs += loss
+                total_loss += loss
 
                 if not done:
                     break
 
-            self.loss_list.append(loss_on_epochs)
-            self.reward_list.append(reward_on_epochs)
+            self.loss_list.append(total_loss)
+            self.reward_list.append(total_reward)
 
         self.__env.reset()
 
