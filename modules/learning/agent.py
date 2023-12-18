@@ -45,7 +45,7 @@ class Agent:
                 loss = self.__model.train_on_batch(inputs, targets)
                 total_loss += loss
 
-                if not is_done:
+                if is_done:
                     break
 
             self.loss_list.append(total_loss)
@@ -66,10 +66,10 @@ class Agent:
                 state = np.array(observation, ndmin=2)
                 action = np.argmax(self.__model.predict(state)[0])
 
-                observation, reward, done = self.__env.step(action)
+                observation, reward, is_done = self.__env.step(action)
                 total_reward += reward
 
-                if not done:
+                if is_done:
                     break
 
             print(total_reward / steps)

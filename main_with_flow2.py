@@ -30,7 +30,9 @@ def main():
     time_steps = 10  # length of each game (for Cartpole, ideally set this to between 100-200)
     epochs = 1  # (Amount of games played)
 
-    env = ClassifierEnv(f'{os.getcwd()}/data/super_optimize_two_dataset.bz2')
+    dataset_path = f'{os.getcwd()}/data/super_optimize_two_dataset.bz2'
+
+    env = ClassifierEnv(dataset_path)
 
     feature_dims = len(env.reset())
     num_actions = env.action_space.n
