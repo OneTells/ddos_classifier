@@ -1,3 +1,5 @@
+import os
+
 import numpy as np
 from keras import Sequential
 from keras.src.layers import Dense, Flatten
@@ -27,7 +29,9 @@ class RunnerEnv:
 
     @classmethod
     def run(cls):
-        env = ClassifierEnv()
+        dataset_path = f'{os.getcwd()}/data/super_optimize_two_dataset.bz2'
+
+        env = ClassifierEnv(dataset_path)
 
         states = env.observation_space.shape[0]
         actions = env.action_space.n

@@ -16,7 +16,7 @@ class RunnerEnv:
         score = 0
 
         while not is_done:
-            _, reward, is_done, _, _ = self.__env.step(action := choice(range(11)))
+            _, reward, is_done = self.__env.step(action := choice(range(11)))
             score += reward
 
             print(f'Кол-во очков: {score} | Действие: {action}')
