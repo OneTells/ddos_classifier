@@ -92,6 +92,20 @@ class Agent:
 
         self.__env.reset()
 
+    def test(self, games: int = 2, time_steps: int = 10):
+        env = ClassifierEnv()
+
+        for _ in range(games):
+            observation = env.reset()
+            total_reward = 0
+
+            for _ in range(time_steps):
+                state = np.array(observation, ndmin=2)
+                action = np.argmax(self.__model.predict(state)[0])
+                observation, reward, done = env.step(action)
+                total_reward += reward
+
+            print(total_reward / time_steps)
 
 def create_model(hidden_size: float, feature_dims: int, num_actions: int, learning_rate: float):
     model = Sequential()
@@ -125,6 +139,9 @@ def main():
     agent.train()
 
     model.save_weights(f'model.weights.h5')
+
+    # model.load_weights(f'model.weights.h5')
+    # agent.test()
 
 
 if __name__ == '__main__':
