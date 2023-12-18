@@ -36,12 +36,12 @@ class Memory(object):
 
             targets[i] = model.predict(state_t)[0]
 
-            Q_sa = np.max(model.predict(state_tp1)[0])
+            q_sa = np.max(model.predict(state_tp1)[0])
 
             if game_over:
                 targets[i, action_t] = reward_t
             else:
-                targets[i, action_t] = reward_t + self.__discount * Q_sa
+                targets[i, action_t] = reward_t + self.__discount * q_sa
 
         return inputs, targets
 
