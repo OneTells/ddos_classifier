@@ -11,6 +11,7 @@ from modules.learning.memory import Memory
 
 def create_model(hidden_size: float, feature_dims: int, num_actions: int, learning_rate: float) -> Sequential:
     model = Sequential()
+
     model.add(Dense(hidden_size, input_shape=(feature_dims,), activation='relu'))
     model.add(Dense(hidden_size, activation='relu'))
     model.add(Dense(num_actions))
