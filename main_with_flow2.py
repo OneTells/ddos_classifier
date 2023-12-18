@@ -50,7 +50,7 @@ loss_list = []
 reward_list = []
 
 
-def train(env, memory: Memory, model, epochs, epsilon=.9, batch_size=10, timesteps=200):
+def train(env, memory: Memory, model, epochs, epsilon=0.9, batch_size=10, timesteps=200):
     for i_episode in range(epochs):
         observation = env.reset()
 
