@@ -62,7 +62,10 @@ class ClassifierEnv:
             if self.__check_row(row) == bool(row['label']):
                 successful_classifications_number += 1
 
-        return float(round(successful_classifications_number / len(dataframe) * 100))
+        if float(round(successful_classifications_number / len(dataframe) * 100)) >= 50:
+            return 1
+
+        return -1
 
     def reset(self, *_) -> ndarray[Any, dtype[Any]]:
         self.__dataframe: TextFileReader = self.__get_dataset()

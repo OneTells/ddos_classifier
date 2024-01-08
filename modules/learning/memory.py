@@ -24,7 +24,7 @@ class Memory(object):
         inputs = np.zeros((batch_size, self.__env_dim))
         targets = np.zeros((batch_size, num_actions))
 
-        for i, idx in enumerate(np.random.randint(0, len_memory, size=batch_size)):
+        for i, idx in enumerate(list(np.random.randint(0, len_memory, size=batch_size))):
             state_t, action_t, reward_t, state_tp1 = self.__memory[idx][0]
 
             game_over = self.__memory[idx][1]
