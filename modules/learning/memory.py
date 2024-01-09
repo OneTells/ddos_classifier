@@ -1,6 +1,5 @@
 import numpy as np
 from keras import Sequential
-from line_profiler_pycharm import profile
 
 
 class Memory(object):
@@ -16,7 +15,6 @@ class Memory(object):
         if len(self.__memory) > self.__max_memory:
             del self.__memory[0]
 
-    @profile
     def get_batch(self, model: Sequential, max_batch_size: int):
         num_actions = model.output_shape[-1]
 
