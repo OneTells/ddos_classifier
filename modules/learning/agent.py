@@ -58,7 +58,7 @@ class Agent:
             self.reward_list.append(total_reward)
 
             self.filters_history.append(repr(self.__env.filters))
-            self.__model.save_weights(f'save_point{number_epoch}.weights.h5')
+            self.__model.save_weights(f'save_point_{number_epoch + 1}.weights.h5')
 
         self.__env.reset()
 
