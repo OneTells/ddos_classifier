@@ -55,7 +55,6 @@ def main():
     # agent.test()
 
     plt.plot(agent.loss_list)
-
     plt.title('model loss')
     plt.ylabel('loss')
     plt.xlabel('epoch')
@@ -63,10 +62,6 @@ def main():
     plt.show()
 
     plt.plot(agent.reward_list)
-
-    print(agent.reward_list)
-    print(agent.loss_list)
-
     plt.title('model reward')
     plt.ylabel('reward')
     plt.xlabel('epoch')
