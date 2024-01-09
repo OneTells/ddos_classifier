@@ -1,16 +1,18 @@
 import numpy as np
 from keras import Sequential
 from line_profiler_pycharm import profile
-from tqdm import tqdm, trange
+from tqdm import trange
 
+from modules.learning.environment import ClassifierEnv
 from modules.learning.memory import Memory
 
 
 class Agent:
 
-    def __init__(self, env, memory: Memory, model: Sequential, epochs: int, epsilon: float, batch_size: int, time_steps: int):
+    def __init__(self, env: ClassifierEnv, memory: Memory, model: Sequential, epochs: int, epsilon: float, batch_size: int, time_steps: int):
         self.loss_list = []
         self.reward_list = []
+        self.filters_history = []
 
         self.__env = env
         self.__memory = memory
@@ -53,6 +55,8 @@ class Agent:
 
             self.loss_list.append(total_loss)
             self.reward_list.append(total_reward)
+
+            self.filters_history.append(self.__env.filters)
 
         self.__env.reset()
 

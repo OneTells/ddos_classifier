@@ -4,6 +4,7 @@ from matplotlib import pyplot as plt
 from keras.models import Sequential
 from keras.src.layers import Dense
 from keras.src.optimizers import Adam
+from sklearn.metrics import classification_report
 
 from modules.learning.agent import Agent
 from modules.learning.environment import ClassifierEnv
@@ -30,8 +31,8 @@ def main():
     max_memory = 10  # max number of experiences to be stored at once
     batch_size = 5  # amount of experiences to sample into each batch for training
 
+    epochs = 5  # (Amount of games played)
     time_steps = 10  # length of each game (for Cartpole, ideally set this to between 100-200)
-    epochs = 50  # (Amount of games played)
 
     dataset_path = f'{os.getcwd()}/data/super_optimize_two_dataset.bz2'
 
@@ -47,6 +48,7 @@ def main():
     agent = Agent(env, memory, model, epochs, epsilon, batch_size, time_steps)
     agent.train()
 
+    print(agent.filters_history)
     # model.save_weights(f'model.weights.h5')
 
     # model.load_weights(f'model.weights.h5')
@@ -70,6 +72,9 @@ def main():
     plt.xlabel('epoch')
     plt.legend(['train'], loc='upper left')
     plt.show()
+
+    result = classification_report(env.report_y_true, env.report_y_answer)
+    print(result)
 
 
 if __name__ == '__main__':
