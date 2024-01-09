@@ -1,5 +1,6 @@
 import numpy as np
 from keras import Sequential
+from line_profiler_pycharm import profile
 
 
 class Memory(object):
@@ -15,7 +16,8 @@ class Memory(object):
         if len(self.__memory) > self.__max_memory:
             del self.__memory[0]
 
-    def get_batch(self, model: Sequential, max_batch_size=10):
+    @profile
+    def get_batch(self, model: Sequential, max_batch_size: int):
         num_actions = model.output_shape[-1]
 
         len_memory = len(self.__memory)
@@ -30,9 +32,9 @@ class Memory(object):
             game_over = self.__memory[idx][1]
             inputs[i:i + 1] = state_t
 
-            targets[i] = model.predict(state_t)[0]
+            targets[i] = model.predict(state_t, verbose=0)[0]
 
-            q_sa = np.max(model.predict(state_tp1)[0])
+            q_sa = np.max(model.predict(state_tp1, verbose=0)[0])
 
             if game_over:
                 targets[i, action_t] = reward_t

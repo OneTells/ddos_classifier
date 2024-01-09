@@ -1,5 +1,7 @@
 import numpy as np
 from keras import Sequential
+from line_profiler_pycharm import profile
+from tqdm import tqdm, trange
 
 from modules.learning.memory import Memory
 
@@ -18,20 +20,21 @@ class Agent:
         self.__batch_size = batch_size
         self.__time_steps = time_steps
 
+    @profile
     def train(self) -> None:
-        for _ in range(self.__epochs):
+        for _ in trange(self.__epochs, desc='Номер эпохи'):
             observation = self.__env.reset()
 
             total_loss = 0
             total_reward = 0
 
-            for _ in range(self.__time_steps):
+            for _ in trange(self.__time_steps, desc='Номер данных'):
                 state_before = np.array(observation, ndmin=2)
 
                 if np.random.rand() < self.__epsilon:
                     action = self.__env.action_space.sample()
                 else:
-                    action = np.argmax(self.__model.predict(state_before)[0])
+                    action = np.argmax(self.__model.predict(state_before, verbose=0)[0])
 
                 observation, reward, is_done = self.__env.step(action)
                 total_reward += reward
@@ -40,7 +43,7 @@ class Agent:
 
                 self.__memory.remember([state_before, action, reward, state_after], is_done)
 
-                inputs, targets = self.__memory.get_batch(self.__model, max_batch_size=self.__batch_size)
+                inputs, targets = self.__memory.get_batch(self.__model, self.__batch_size)
 
                 loss = self.__model.train_on_batch(inputs, targets)
                 total_loss += loss
