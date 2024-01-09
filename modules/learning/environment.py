@@ -37,10 +37,10 @@ class ClassifierEnv:
 
         self.filters: tuple[Filter, ...] = (
             Filter(3, 1, 'mptf'),
-            Filter(40, 5, 'mbtf'),
-            Filter(3, 1, 'mprf'),
-            Filter(50, 5, 'mbrf'),
-            Filter(0.1, 0.01, 'rtp')
+            Filter(85, 5, 'mbtf'),
+            Filter(4, 1, 'mprf'),
+            Filter(45, 5, 'mbrf'),
+            Filter(0.13, 0.01, 'rtp')
         )
 
         self.report_y_true = []

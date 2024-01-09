@@ -22,3 +22,6 @@ class Filter:
     def reset(self) -> float:
         self.threshold: float = self.__default_threshold
         return self.threshold
+
+    def __repr__(self) -> str:
+        return str(self.threshold)

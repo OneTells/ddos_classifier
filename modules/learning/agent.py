@@ -56,7 +56,7 @@ class Agent:
             self.loss_list.append(total_loss)
             self.reward_list.append(total_reward)
 
-            self.filters_history.append(self.__env.filters)
+            self.filters_history.append(repr(self.__env.filters))
 
         self.__env.reset()
 
