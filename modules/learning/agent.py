@@ -5,6 +5,8 @@ from tqdm import trange
 from modules.learning.environment import ClassifierEnv
 from modules.learning.memory import Memory
 
+bar_format = '{desc}:{percentage:3.0f}%|{bar}| {n_fmt}/{total_fmt} [{elapsed_s:4.0f}s прошло | {remaining_s:4.0f}s осталось]'
+
 
 class Agent:
 
@@ -23,13 +25,13 @@ class Agent:
         self.__time_steps = time_steps
 
     def train(self) -> None:
-        for _ in trange(self.__epochs, desc='Номер эпохи'):
+        for number_epoch in trange(self.__epochs, desc='Обучение модели', bar_format=bar_format):
             observation = self.__env.reset()
 
             total_loss = 0
             total_reward = 0
 
-            for _ in trange(self.__time_steps, desc='Номер данных'):
+            for _ in trange(self.__time_steps, desc=f'Обучение {number_epoch + 1} эпохи', bar_format=bar_format):
                 state_before = np.array(observation, ndmin=2)
 
                 if np.random.rand() < self.__epsilon:
