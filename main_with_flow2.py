@@ -82,9 +82,9 @@ class Main:
 
     @classmethod
     def run(cls):
-        agent, last_filter = cls.__train(5, 10)
-        print(f'{last_filter=}')
-        cls.__test(agent, last_filter)
+        agent, last_filters = cls.__train(5, 10)
+        print(f'{last_filters=}')
+        cls.__test(agent, last_filters)
 
 
 if __name__ == '__main__':
