@@ -66,19 +66,11 @@ class Agent:
         for _ in range(epochs):
             observation = env.reset()
 
-            total_reward = 0
-            steps = 0
-
             for _ in range(time_steps):
-                steps += 1
-
                 state = np.array(observation, ndmin=2)
                 action = np.argmax(self.__model.predict(state)[0])
 
-                observation, reward, is_done = env.step(action)
-                total_reward += reward
+                observation, _, is_done = env.step(action)
 
                 if is_done:
                     break
-
-            print(total_reward / steps)
