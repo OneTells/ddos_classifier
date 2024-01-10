@@ -17,7 +17,14 @@ class Agent:
 
         self.__model = model
 
+    def __reset(self):
+        self.loss_list = []
+        self.reward_list = []
+        self.filters_history = []
+
     def train(self, env: ClassifierEnv, memory: Memory, epochs: int, epsilon: float, batch_size: int, time_steps: int) -> None:
+        self.__reset()
+
         for number_epoch in trange(epochs, desc='Обучение модели', bar_format=bar_format):
             observation = env.reset()
 
@@ -53,9 +60,9 @@ class Agent:
             self.filters_history.append(repr(env.filters))
             self.__model.save_weights(f'save_point_{number_epoch + 1}.weights.h5')
 
-        env.reset()
-
     def test(self, env: ClassifierEnv, epochs: int = 2, time_steps: int = 10) -> None:
+        self.__reset()
+
         for _ in range(epochs):
             observation = env.reset()
 

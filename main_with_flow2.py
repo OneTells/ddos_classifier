@@ -1,4 +1,5 @@
 import os
+from typing import Tuple
 
 from keras.models import Sequential
 from keras.src.layers import Dense
@@ -8,6 +9,7 @@ from sklearn.metrics import classification_report
 
 from modules.learning.agent import Agent
 from modules.learning.environment import ClassifierEnv
+from modules.learning.filter import Filter
 from modules.learning.memory import Memory
 
 
@@ -48,7 +50,7 @@ class Main:
         plt.show()
 
     @classmethod
-    def train(cls, epochs: int, time_steps: int) -> Agent:
+    def train(cls, epochs: int, time_steps: int) -> tuple[Agent, tuple[Filter, ...]]:
         dataset_path = f'{os.getcwd()}/data/super_optimize_two_dataset.bz2'
         env = ClassifierEnv(dataset_path)
 
@@ -64,12 +66,13 @@ class Main:
         print(agent.filters_history)
 
         cls.__draw(agent)
-        return agent
+        return agent, env.filters
 
     @classmethod
-    def test(cls, agent: Agent):
+    def test(cls, agent: Agent, filters: tuple[Filter, ...]):
         dataset_path = f'{os.getcwd()}/data/super_optimize_one_dataset.bz2'
         env = ClassifierEnv(dataset_path)
+        env.filters = filters
 
         agent.test(env, 3, 50)
 
@@ -80,8 +83,8 @@ class Main:
 
     @classmethod
     def run(cls):
-        agent = cls.train(5, 10)
-        cls.test(agent)
+        agent, filters = cls.train(5, 10)
+        cls.test(agent, filters)
 
 
 if __name__ == '__main__':
