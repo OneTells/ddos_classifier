@@ -33,7 +33,7 @@ class Main:
     batch_size = 5  # amount of experiences to sample into each batch for training
 
     @staticmethod
-    def __draw_loss(agent: Agent):
+    def __draw_loss(agent: Agent) -> None:
         plt.plot(agent.loss_list)
         plt.title('model loss')
         plt.ylabel('loss')
@@ -42,7 +42,7 @@ class Main:
         plt.show()
 
     @staticmethod
-    def __draw_reward(agent: Agent):
+    def __draw_reward(agent: Agent) -> None:
         plt.plot(agent.reward_list)
         plt.title('model reward')
         plt.ylabel('reward')
@@ -72,7 +72,7 @@ class Main:
         return agent, env.filters
 
     @classmethod
-    def __test(cls, agent: Agent, filters: tuple[Filter, ...]):
+    def __test(cls, agent: Agent, filters: tuple[Filter, ...]) -> None:
         dataset_path = f'{os.getcwd()}/data/super_optimize_one_dataset.bz2'
         env = ClassifierEnv(dataset_path)
         env.filters = filters
@@ -85,7 +85,7 @@ class Main:
         cls.__draw_reward(agent)
 
     @classmethod
-    def run(cls):
+    def run(cls) -> None:
         agent, last_filters = cls.__train(5, 10)
         print(f'{last_filters=}')
         cls.__test(agent, last_filters)
