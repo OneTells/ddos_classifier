@@ -60,15 +60,15 @@ class Agent:
             self.filters_history.append(repr(env.filters))
             self.__model.save_weights(f'save_point_{number_epoch + 1}.weights.h5')
 
-    def test(self, env: ClassifierEnv, epochs: int = 2, time_steps: int = 10) -> None:
+    def test(self, env: ClassifierEnv, games: int = 2, time_steps: int = 10) -> None:
         self.__reset()
 
-        for _ in range(epochs):
+        for _ in range(games):
             observation = env.reset()
 
             for _ in range(time_steps):
                 state = np.array(observation, ndmin=2)
-                action = np.argmax(self.__model.predict(state)[0])
+                action = np.argmax(self.__model.predict(state, verbose=0)[0])
 
                 observation, _, is_done = env.step(action)
 
