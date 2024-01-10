@@ -1,9 +1,9 @@
 import os
-from matplotlib import pyplot as plt
 
 from keras.models import Sequential
 from keras.src.layers import Dense
 from keras.src.optimizers import Adam
+from matplotlib import pyplot as plt
 from sklearn.metrics import classification_report
 
 from modules.learning.agent import Agent
@@ -22,7 +22,7 @@ def create_model(hidden_size: float, feature_dims: int, num_actions: int, learni
     return model
 
 
-def main():
+class Main:
     epsilon = 0.10  # probability of choosing a random action instead of using the model to decide
     hidden_size = 5  # size of the hidden layers within the network
     discount = 0.95  # value of future reward vs. current reward
@@ -31,46 +31,58 @@ def main():
     max_memory = 10  # max number of experiences to be stored at once
     batch_size = 5  # amount of experiences to sample into each batch for training
 
-    epochs = 5  # (Amount of games played)
-    time_steps = 10  # length of each game (for Cartpole, ideally set this to between 100-200)
+    @staticmethod
+    def __draw(agent: Agent):
+        plt.plot(agent.loss_list)
+        plt.title('model loss')
+        plt.ylabel('loss')
+        plt.xlabel('epoch')
+        plt.legend(['train'], loc='upper left')
+        plt.show()
 
-    dataset_path = f'{os.getcwd()}/data/super_optimize_two_dataset.bz2'
+        plt.plot(agent.reward_list)
+        plt.title('model reward')
+        plt.ylabel('reward')
+        plt.xlabel('epoch')
+        plt.legend(['train'], loc='upper left')
+        plt.show()
 
-    env = ClassifierEnv(dataset_path)
+    @classmethod
+    def train(cls, epochs: int, time_steps: int) -> Agent:
+        dataset_path = f'{os.getcwd()}/data/super_optimize_two_dataset.bz2'
+        env = ClassifierEnv(dataset_path)
 
-    feature_dims = len(env.reset())
-    num_actions = env.action_space.n
+        feature_dims = len(env.reset())
+        num_actions = env.action_space.n
 
-    memory = Memory(feature_dims, max_memory, discount)
+        model = create_model(cls.hidden_size, feature_dims, num_actions, cls.learning_rate)
+        agent = Agent(model)
 
-    model = create_model(hidden_size, feature_dims, num_actions, learning_rate)
+        memory = Memory(feature_dims, cls.max_memory, cls.discount)
+        agent.train(env, memory, epochs, cls.epsilon, cls.batch_size, time_steps)
 
-    agent = Agent(env, memory, model, epochs, epsilon, batch_size, time_steps)
-    agent.train()
+        print(agent.filters_history)
 
-    print(agent.filters_history)
-    # model.save_weights(f'model.weights.h5')
+        cls.__draw(agent)
+        return agent
 
-    # model.load_weights(f'model.weights.h5')
-    # agent.test()
+    @classmethod
+    def test(cls, agent: Agent):
+        dataset_path = f'{os.getcwd()}/data/super_optimize_one_dataset.bz2'
+        env = ClassifierEnv(dataset_path)
 
-    plt.plot(agent.loss_list)
-    plt.title('model loss')
-    plt.ylabel('loss')
-    plt.xlabel('epoch')
-    plt.legend(['train'], loc='upper left')
-    plt.show()
+        agent.test(env, 3, 50)
 
-    plt.plot(agent.reward_list)
-    plt.title('model reward')
-    plt.ylabel('reward')
-    plt.xlabel('epoch')
-    plt.legend(['train'], loc='upper left')
-    plt.show()
+        result = classification_report(env.report_y_true, env.report_y_answer)
+        print(result)
 
-    result = classification_report(env.report_y_true, env.report_y_answer)
-    print(result)
+        cls.__draw(agent)
+
+    @classmethod
+    def run(cls):
+        agent = cls.train(5, 10)
+        cls.test(agent)
 
 
 if __name__ == '__main__':
-    main()
+    Main.run()
