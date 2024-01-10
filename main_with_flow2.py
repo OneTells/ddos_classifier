@@ -33,7 +33,7 @@ class Main:
     batch_size = 5  # amount of experiences to sample into each batch for training
 
     @staticmethod
-    def __draw(agent: Agent):
+    def __draw_loss(agent: Agent):
         plt.plot(agent.loss_list)
         plt.title('model loss')
         plt.ylabel('loss')
@@ -41,6 +41,8 @@ class Main:
         plt.legend(['train'], loc='upper left')
         plt.show()
 
+    @staticmethod
+    def __draw_reward(agent: Agent):
         plt.plot(agent.reward_list)
         plt.title('model reward')
         plt.ylabel('reward')
@@ -64,7 +66,9 @@ class Main:
 
         print(agent.filters_history)
 
-        cls.__draw(agent)
+        cls.__draw_loss(agent)
+        cls.__draw_reward(agent)
+
         return agent, env.filters
 
     @classmethod
@@ -78,7 +82,7 @@ class Main:
         result = classification_report(env.report_y_true, env.report_y_answer)
         print(result)
 
-        cls.__draw(agent)
+        cls.__draw_reward(agent)
 
     @classmethod
     def run(cls):

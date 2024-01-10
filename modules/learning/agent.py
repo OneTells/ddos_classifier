@@ -66,11 +66,15 @@ class Agent:
         for _ in range(games):
             observation = env.reset()
 
+            total_reward = []
             for _ in range(time_steps):
                 state = np.array(observation, ndmin=2)
                 action = np.argmax(self.__model.predict(state, verbose=0)[0])
 
-                observation, _, is_done = env.step(action)
+                observation, reward, is_done = env.step(action)
+                total_reward.append(reward)
 
                 if is_done:
                     break
+
+            self.reward_list.append(sum(total_reward) / len(total_reward))
