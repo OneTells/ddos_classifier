@@ -66,15 +66,15 @@ class Agent:
         for game_number in trange(games, desc='Тестирование модели', bar_format=bar_format):
             observation = env.reset()
 
-            total_reward = []
+            total_reward = 0
             for _ in trange(time_steps, desc=f'Тестирование в {game_number + 1} игре', bar_format=bar_format):
                 state = np.array(observation, ndmin=2)
                 action = np.argmax(self.__model.predict(state, verbose=0)[0])
 
                 observation, reward, is_done = env.step(action)
-                total_reward.append(reward)
+                total_reward += reward
 
                 if is_done:
                     break
 
-            self.reward_list.append(sum(total_reward) / len(total_reward))
+            self.reward_list.append(total_reward)
