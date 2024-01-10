@@ -63,11 +63,11 @@ class Agent:
     def test(self, env: ClassifierEnv, games: int = 2, time_steps: int = 10) -> None:
         self.__reset()
 
-        for _ in range(games):
+        for game_number in trange(games, desc='Тестирование модели', bar_format=bar_format):
             observation = env.reset()
 
             total_reward = []
-            for _ in range(time_steps):
+            for _ in trange(time_steps, desc=f'Тестирование в {game_number + 1} игре', bar_format=bar_format):
                 state = np.array(observation, ndmin=2)
                 action = np.argmax(self.__model.predict(state, verbose=0)[0])
 
