@@ -1,5 +1,4 @@
 import os
-from typing import Tuple
 
 from keras.models import Sequential
 from keras.src.layers import Dense
@@ -50,7 +49,7 @@ class Main:
         plt.show()
 
     @classmethod
-    def train(cls, epochs: int, time_steps: int) -> tuple[Agent, tuple[Filter, ...]]:
+    def __train(cls, epochs: int, time_steps: int) -> tuple[Agent, tuple[Filter, ...]]:
         dataset_path = f'{os.getcwd()}/data/super_optimize_two_dataset.bz2'
         env = ClassifierEnv(dataset_path)
 
@@ -69,7 +68,7 @@ class Main:
         return agent, env.filters
 
     @classmethod
-    def test(cls, agent: Agent, filters: tuple[Filter, ...]):
+    def __test(cls, agent: Agent, filters: tuple[Filter, ...]):
         dataset_path = f'{os.getcwd()}/data/super_optimize_one_dataset.bz2'
         env = ClassifierEnv(dataset_path)
         env.filters = filters
@@ -83,8 +82,9 @@ class Main:
 
     @classmethod
     def run(cls):
-        agent, filters = cls.train(5, 10)
-        cls.test(agent, filters)
+        agent, last_filter = cls.__train(5, 10)
+        print(f'{last_filter=}')
+        cls.__test(agent, last_filter)
 
 
 if __name__ == '__main__':
