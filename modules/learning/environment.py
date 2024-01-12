@@ -68,7 +68,7 @@ class ClassifierEnv:
             self.report_y_true.append(bool(row['label']))
             self.report_y_answer.append(answer)
 
-        if float(round(successful_classifications_number / len(dataframe) * 100)) >= 50:
+        if round(successful_classifications_number / len(dataframe) * 100) >= 50:
             return 1
 
         return -1

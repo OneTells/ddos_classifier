@@ -25,12 +25,12 @@ def create_model(hidden_size: float, feature_dims: int, num_actions: int, learni
 
 class Main:
     epsilon = 0.10  # probability of choosing a random action instead of using the model to decide
-    hidden_size = 5  # size of the hidden layers within the network
+    hidden_size = 25  # size of the hidden layers within the network
     discount = 0.95  # value of future reward vs. current reward
     learning_rate = 0.005  # the multiplicative rate at which the weights of the model are shifted
 
-    max_memory = 10  # max number of experiences to be stored at once
-    batch_size = 5  # amount of experiences to sample into each batch for training
+    max_memory = 50  # max number of experiences to be stored at once
+    batch_size = 25  # amount of experiences to sample into each batch for training
 
     @staticmethod
     def __draw_loss(agent: Agent) -> None:
@@ -86,7 +86,7 @@ class Main:
 
     @classmethod
     def run(cls) -> None:
-        agent, last_filters = cls.__train(5, 10)
+        agent, last_filters = cls.__train(10, 50)
         print(f'{last_filters=}')
         cls.__test(agent, last_filters)
 
