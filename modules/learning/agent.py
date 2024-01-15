@@ -43,7 +43,6 @@ class Agent:
                 total_reward += reward
 
                 state_after = np.array(observation, ndmin=2)
-
                 memory.remember([state_before, action, reward, state_after], is_done)
 
                 inputs, targets = memory.get_batch(self.__model, batch_size)

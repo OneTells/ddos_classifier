@@ -26,10 +26,9 @@ class Memory(object):
 
         for i, idx in enumerate(list(np.random.randint(0, len_memory, size=batch_size))):
             state_t, action_t, reward_t, state_tp1 = self.__memory[idx][0]
-
             game_over = self.__memory[idx][1]
-            inputs[i:i + 1] = state_t
 
+            inputs[i:i + 1] = state_t
             targets[i] = model.predict(state_t, verbose=0)[0]
 
             q_sa = np.max(model.predict(state_tp1, verbose=0)[0])

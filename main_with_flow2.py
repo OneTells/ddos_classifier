@@ -64,8 +64,6 @@ class Main:
         memory = Memory(feature_dims, cls.max_memory, cls.discount)
         agent.train(env, memory, epochs, cls.epsilon, cls.batch_size, time_steps)
 
-        print(agent.filters_history)
-
         cls.__draw_loss(agent)
         cls.__draw_reward(agent)
 

@@ -34,7 +34,6 @@ class ClassifierEnv:
         )
 
         self.observation_space = Box(low, high, dtype=np.float32)
-
         self.filters: tuple[Filter, ...] = (
             Filter(3, 1, 'mptf'),
             Filter(85, 5, 'mbtf'),
